@@ -8,7 +8,7 @@ var cache = {};
 function send404(response) {
 	response.writeHead(404,{'Content-Type':'text/plain'});
 	response.write('Error 404: resource not found.');
-	resource.end();
+	response.end();
 }
 
 // 提供文件数据服务

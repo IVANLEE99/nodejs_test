@@ -3,7 +3,8 @@ var fs = require('fs');
 var path = require('path');
 var mime = require('mime');
 var cache = {};
-
+var chatServer = require('./lib/chat_server.js');
+chatServer.listen(server); 
 // 文件不存在时发送404错误
 function send404(response) {
 	response.writeHead(404,{'Content-Type':'text/plain'});

@@ -17,8 +17,21 @@ function processUserInput(chatApp, socket) {
 		 }
 	}else{
 		chatApp.sendMessage($('room').text(), message);
-		$('#messages').append(divEscapedContentElement(message));
-		$('#messages').scrollTop($('#messages').prop('scrollHeight'));
+		var mess='_我_:'+message;
+		socket.on('my_nick',function (my) {
+			if (my.success) {
+				mess='_我_('+my.my_nick+'):'+message;
+				console.log(mess);
+				$('#messages').append(divEscapedContentElement(mess));
+				$('#messages').scrollTop($('#messages').prop('scrollHeight'));
+			}else{
+				$('#messages').append(divEscapedContentElement(mess));
+				$('#messages').scrollTop($('#messages').prop('scrollHeight'));
+			}
+		});
+		
+		
+		
 	}
 	$('#send-message').val('');
 }
@@ -53,12 +66,13 @@ $(document).ready(function () {
 		}else{
 			message = result.message;
 		}
-		
+
 		$('#messages').append(divSystemContentElement(message));
 	});
 
 	socket.on('joinResult', function (result) {
-		$('#room').text(result.room);
+		$('#room').text('当前房间为：'+result.room);
+		$('#room').css({'text-align':'center','color':'red'});
 		$('#messages').append(divSystemContentElement('(房间变更)room changed.'));
 	});
 

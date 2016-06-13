@@ -24,9 +24,26 @@ function processUserInput(chatApp, socket) {
 }
 
 
-var socket = io.connect();
 
+var socket = io.connect();
+// var socket= io('http://localhost:3000');
 $(document).ready(function () {
+
+	
+	// alert('connecting...')
+	// console.log('connecting..2..')
+ //        socket.on('news', function (data) {//接收到服务器发送过来的名为'new'的数据  
+ //        	console.log(data.hello);//data为应服务器发送过来的数据。  
+ //        	socket.emit('my new event', { my:'new data' });//向服务器发送数据，实现双向数据传输  
+ //        });
+
+ //        socket.on('other', function (data) {//接收另一个名为'other'数据，  
+ //                console.log(data.hello);  
+ //                socket.emit('event1', { my:'other data' });  
+ //        });  
+        
+
+	alert('ready');
 	var chatApp = new Chat(socket);
 
 	socket.on('nameResult', function (result) {
@@ -36,21 +53,21 @@ $(document).ready(function () {
 		}else{
 			message = result.message;
 		}
-
+		
 		$('#messages').append(divSystemContentElement(message));
 	});
 
 	socket.on('joinResult', function (result) {
 		$('#room').text(result.room);
-		$('#messages').append(divSystemContentElement('room changed.'));
+		$('#messages').append(divSystemContentElement('(房间变更)room changed.'));
 	});
 
-	socket.on('message', function (result) {
+	socket.on('message', function (message) {
 		var  newElement = $('<div></div>').text(message.text);
 		$('#messages').append(newElement);
 	});
 
-	socket.on('rooms', function (result) {
+	socket.on('rooms', function (rooms) {
 		$('#room-list').empty();
 
 		for (var room in rooms) {
@@ -61,6 +78,7 @@ $(document).ready(function () {
 		}
 
 		$('#room-list div').click(function () {
+			// alert('send-click')
 			chatApp.processCommand('/join ' + $(this).text());
 			$('#send-message').focus();
 		});
@@ -74,7 +92,8 @@ $(document).ready(function () {
 
 		$('#send-message').focus();
 
-		$('#send-message').submit(function () {
+		$('#send-form').submit(function () {
+			// alert('submit:'+socket);
 			processUserInput(chatApp, socket);
 			return false;
 		});
